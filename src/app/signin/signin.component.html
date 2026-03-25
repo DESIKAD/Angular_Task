@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="form-container">
+
+        <form (ngSubmit)="loginData()">
+        <h1>Login</h1>
+
+        <div class="form-group">
+            <label for="">Email</label>
+            <input type="email" name="email" id="" [(ngModel)]="email" >
+        </div>
+        <div class="form-group">
+            <label for="">Password</label>
+            <input type="password" name="password" id="" [(ngModel)]="password">
+        </div>
+        <div class="btn-align">
+        <button class="btn btn-primary" [disabled]="loading" >Submit</button>
+        </div>
+</form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

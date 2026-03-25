@@ -1,0 +1,31 @@
+<!-- <h1>{{sum}}</h1> -->
+
+
+<h3>Skill Known</h3>
+
+<div>
+  <label>
+    <input type="checkbox" (change)="CheckedItem($event, 'HTML')"> HTML
+  </label>
+</div>
+
+<div>
+  <label>
+    <input type="checkbox" (change)="CheckedItem($event, 'CSS')"> CSS
+  </label>
+</div>
+
+<div>
+  <label>
+    <input type="checkbox" (change)="CheckedItem($event, 'Javascript')"> Javascript
+  </label>
+</div>
+
+<div>
+  <label>
+    <input type="checkbox" (change)="CheckedItem($event, 'Angular')"> Angular
+  </label>
+</div>
+
+<p><strong>Current Array:</strong> {{ skillList | json }}</p>
+

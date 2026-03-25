@@ -1,2 +1,72 @@
-<p>home works!</p>
-<h1>Heyy Hii</h1>
+<div class="container">
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <form (ngSubmit)="OnSubmit()">
+      
+      <div class="form-group">
+        <label for="name">Full Name</label>
+<input type="text" name="fullName" id="Username" placeholder="Enter your name" [(ngModel)]="name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+<input type="email" name="emailAddr" id="Useremail" placeholder="email@example.com" [(ngModel)]="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+<input type="password" name="userPass" id="Userpassword" placeholder="••••••••" [(ngModel)]="password">
+      </div>
+      <div class="form-group">
+        <label for="phone_no">Phone Number</label>
+        <input type="tel" name="Userphone_no" id="ph_no" [(ngModel)]="phone_no">
+      </div>
+
+      <div class="form-group">
+        <label for="UserRole">Role</label>
+        <select name="UserRole" id="UserRole" [(ngModel)]="role">
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
+          <option value="General" >General</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <div class="options-group">
+          <label class="option-item"><input type="radio" value="male" [(ngModel)]="gender" name="genders" > Male</label>
+          <label class="option-item"><input type="radio" value="female" [(ngModel)]="gender" name="genders" > Female</label>
+          <label class="option-item"><input type="radio" value="other" [(ngModel)]="gender" name="genders"> Other</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Skills</label>
+        <div class="options-group">
+          <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'HTML')"> HTML</label>
+          <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Css')"> CSS</label>
+          <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Javascript')"> JS</label>
+          <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Angular')"> Angular</label>
+        </div>
+      </div>
+
+
+     <div class="form-group">
+        <label for="profile-img">Profile Picture</label>
+        <input type="file" id="profile-img" accept="image/*" (change)="onFileChange($event)">
+      </div>
+      <div *ngIf="previewUrl">
+  <p>Image Preview:</p>
+  <img [src]="previewUrl" style="width: 200px; border-radius: 8px;">
+  
+  <br>
+  <a [href]="previewUrl" target="_blank">View Full Image Link</a>
+</div>
+      <button type="submit">Register Now</button>
+    </form>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

@@ -1,0 +1,178 @@
+ <div class="attendance-container">
+  
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Attendance</h1>
+      <div class="date-selector">
+        <!-- <button class="nav-btn">&lt;</button> -->
+        <span class="date-text">{{ currentDate }}</span>
+        <!-- <button class="nav-btn">&gt;</button> -->
+      </div>
+    </div>
+    <!-- <div class="header-right">
+      <button class="btn-outline">📄 Attendance Report</button>
+      <button class="btn-primary">👤+ Add Attendance</button>
+    </div> -->
+  </div>
+
+  <!-- <div class="summary-cards-grid">
+    <div class="summary-card">
+      <div class="card-header">
+        <div class="title"><span class="icon present">📋</span> Present Summary</div>
+        <button class="more-btn">...</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-col">
+          <p class="label">On time</p>
+          <h2 class="value">265</h2>
+          <p class="trend pos">+12 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">Late clock-in</p>
+          <h2 class="value">62</h2>
+          <p class="trend neg">-6 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">Early clock-in</p>
+          <h2 class="value">224</h2>
+          <p class="trend neg">-6 vs yesterday</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-header">
+        <div class="title"><span class="icon not-present">📋</span> Not Present Summary</div>
+        <button class="more-btn">...</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-col">
+          <p class="label">Absent</p>
+          <h2 class="value">42</h2>
+          <p class="trend pos">+12 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">No clock-in</p>
+          <h2 class="value">36</h2>
+          <p class="trend neg">-6 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">No clock-out</p>
+          <h2 class="value">0</h2>
+          <p class="trend neu">0 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">Invalid</p>
+          <h2 class="value">0</h2>
+          <p class="trend neu">0 vs yesterday</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-header">
+        <div class="title"><span class="icon away">📋</span> Away Summary</div>
+        <button class="more-btn">...</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-col">
+          <p class="label">Day off</p>
+          <h2 class="value">0</h2>
+          <p class="trend neg">-2 vs yesterday</p>
+        </div>
+        <div class="stat-col">
+          <p class="label">Time off</p>
+          <h2 class="value">0</h2>
+          <p class="trend neg">-6 vs yesterday</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <div class="filters-left">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search employee">
+      </div>
+      <button class="filter-btn">📅 Date Range ⌄</button>
+      <button class="filter-btn">⚙️ Advance Filter ⌄</button>
+    </div>
+    <div class="filters-right">
+      <button class="view-btn active">▦</button>
+      <button class="view-btn">📄</button>
+    </div>
+  </div> -->
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>👤 Employee Name</th>
+          <th>🕒 Clock-in & Out</th>
+          <th>⏱️ Overtime</th>
+          <th>🖼️ Picture</th>
+          <th>📍 Location</th>
+          <th>📝 Note</th>
+        </tr>
+      </thead>
+      <tbody>
+  <tr *ngFor="let record of attendanceRecords">
+    <td>
+      <div class="employee-info">
+        <div class="emp-avatar">{{ record.name.charAt(0) | uppercase }}</div>
+        <div class="emp-text">
+          <span class="emp-name">{{ record.name }}</span>
+          <span class="emp-id">#{{ record.id }}</span>
+        </div>
+      </div>
+    </td>
+    
+    <td>
+      <div class="clock-timeline">
+        <span class="time" [class.late-text]="record.status === 'late'">{{ record.clockIn }}</span>
+        <div class="duration-line">
+          <div class="dot"></div>
+          <span class="duration-text">{{ record.duration }}</span>
+          <div class="dot"></div>
+        </div>
+        <span class="time">{{ record.clockOut }}</span>
+      </div>
+    </td>
+    
+    <td>
+      <span class="overtime-badge" [class.active]="record.overtime !== '-'">
+        {{ record.overtime }}
+      </span>
+    </td>
+
+    <td>
+      <button class="action-btn btn-photo" (click)="viewPhoto(record.picture)">
+        🖼️ Photo
+      </button>
+    </td>
+    
+    <td>
+      <div class="location-cell">
+        <span class="work-mode-badge" [ngClass]="record.workMode?.toLowerCase() || 'office'">
+          {{ record.workMode || 'Office' }}
+        </span>
+        <button class="action-btn btn-map" (click)="openMap(record.gpsLocation?.lat, record.gpsLocation?.lng)">
+          📍 Map
+        </button>
+      </div>
+    </td>
+    
+    <td class="note-cell">
+      <div class="note-text" [title]="record.note">{{ record.note }}</div>
+    </td>
+  </tr>
+</tbody>
+    </table>
+  </div>
+
+</div> 
+
+
+
+

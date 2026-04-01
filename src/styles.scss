@@ -1,2 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'ngx-toastr/toastr';
+
+/* Add this to your root styles.scss */
+:root {
+--bg: #d4e1fa;
+  --surface: #f9f9f9;
+  --surface2: #a6b2ee;
+  --border: rgba(255,255,255,0.07);
+  --accent: #6c63ff;
+  --accent2: #ff6584;
+  --accent3: #43e8b0;
+  --accent4: #ffb347;
+  --text: #4d64ea;
+  --muted: #29292a;
+  --sidebar-w: 240px;
+  --header-h: 64px;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  // background: var(--bg);
+  color: var(--text);
+}

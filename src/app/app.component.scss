@@ -1,0 +1,36 @@
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR STYLES (Paste your sidebar CSS here) ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 100;
+  padding: 28px 0;
+}
+.logo { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; padding: 0 24px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+nav { flex: 1; padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; }
+nav a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all .2s; position: relative; }
+nav a:hover { background: var(--surface2); color: var(--text); }
+nav a.active { background: linear-gradient(135deg, rgba(108,99,255,.2), rgba(108,99,255,.05)); color: #fff; border: 1px solid rgba(108,99,255,.3); }
+nav a.active::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 3px; border-radius: 0 3px 3px 0; background: var(--accent); }
+.sidebar-bottom { padding: 16px 12px; border-top: 1px solid var(--border); }
+.logout-btn { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: var(--accent2); font-size: 0.88rem; font-weight: 500; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+.logout-btn:hover { background: rgba(255,101,132,.1); }
+
+/* ── MAIN CONTENT AREA ── */
+.main-content {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

@@ -45,13 +45,16 @@ async OnSubmit() {
       name: this.name,
       email: this.email,
       skills: this.skills, 
+      phone_no:this.phone_no,
       profile_img: this.profile_img,
       role: this.role,
       password:this.password
     };
 
-    this.apiService.createUserProfile(userObj).subscribe({
-      next: (response) => {
+      this.apiService.createUserProfile(uid, userObj).subscribe({
+ next: () => {
+    console.log("Saved with UID");
+         
         this.toastr.success('Profile created successfully!', 'Success');
         this.resetForm();
 
@@ -59,7 +62,7 @@ async OnSubmit() {
                      this.spinner.hide()
 
       },
-      error: (err) => {
+    error: (err) => {
         this.toastr.error('Failed to save profile data', 'API Error');
               this.spinner.hide();
 

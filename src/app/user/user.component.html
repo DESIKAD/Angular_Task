@@ -1,0 +1,82 @@
+<div class="attendance-wrapper">
+  <div class="attendance-card">
+    
+    <div class="card-header">
+      <h2>Good Morning, {{ userName }}! 👋</h2>
+      <p class="date">{{ currentTime | date:'EEEE, d MMMM y' }}</p>
+    </div>
+
+    <div class="time-display">
+      <h1 class="clock">{{ currentTime | date:'hh:mm:ss a' }}</h1>
+      <div class="status-badge" [ngClass]="{'active': isCheckedIn, 'inactive': !isCheckedIn}">
+        <span class="pulse-dot"></span>
+        {{ isCheckedIn ? 'Currently Log In' : 'Not Log In' }}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="form-section" *ngIf="!isCheckedIn">
+      <div class="form-group">
+        <label>Working From</label>
+        <select [(ngModel)]="workLocation">
+          <option value="Office">🏢 Office</option>
+          <option value="Remote">🏠 Remote</option>
+          <option value="Client Site">🤝 Client Site</option>
+        </select>
+      </div>
+
+      <div class="camera-overlay" *ngIf="showCamera">
+      <div class="camera-container">
+        <h3>Verify Identity 📸</h3>
+        <p>Please take a photo to clock in.</p>
+
+        <div class="video-wrapper" *ngIf="!capturedImage">
+          <video #videoElement autoplay playsinline></video>
+        </div>
+
+        <div class="video-wrapper preview" *ngIf="capturedImage">
+          <img [src]="capturedImage" alt="Captured Identity">
+        </div>
+
+        <canvas #canvasElement style="display: none;"></canvas>
+
+        <div class="camera-actions">
+          <ng-container *ngIf="!capturedImage">
+            <button class="btn-secondary" (click)="cancelCamera()">Cancel</button>
+            <button class="btn-capture" (click)="captureImage()">📸 Capture</button>
+          </ng-container>
+
+          <ng-container *ngIf="capturedImage">
+            <button class="btn-secondary" (click)="retakeImage()">Retake</button>
+            <button class="btn-confirm" (click)="confirmClockIn()">✅ Confirm & Clock In</button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+      <div class="form-group">
+        <label>Daily Goal / Note (Optional)</label>
+        <input type="text" [(ngModel)]="dailyNote" placeholder="What are you working on today?">
+      </div>
+    </div>
+
+    <div class="timestamps" *ngIf="checkInTime">
+      <div class="time-block">
+        <span class="label">Clock In</span>
+        <span class="time">{{ checkInTime | date:'shortTime' }}</span>
+      </div>
+      <div class="time-block" *ngIf="checkOutTime">
+        <span class="label">Clock Out</span>
+        <span class="time">{{ checkOutTime | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <button 
+      class="action-btn" 
+      [ngClass]="{'btn-clock-in': !isCheckedIn, 'btn-clock-out': isCheckedIn}"
+      (click)="toggleAttendance()">
+      {{ isCheckedIn ? '🕒 Log Out' : '🕒 Log In' }}
+    </button>
+
+  </div>
+</div>

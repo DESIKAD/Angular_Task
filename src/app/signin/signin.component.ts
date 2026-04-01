@@ -27,7 +27,6 @@ export class SigninComponent implements OnInit{
 
 async loginData(){
 
-  // ✅ Step 1: Validation FIRST
   if(!this.email || !this.password){
     this.toastr.warning("Please fill all fields ⚠️");
     return;
@@ -37,28 +36,51 @@ async loginData(){
     this.loading = true;
     this.spinner.show();
 
-    // ✅ Step 2: Authentication only
     const userAuth = await this.authService.signin(this.email, this.password);
+    const uid = userAuth.user.uid;
 
-    console.log(userAuth);
+    console.log("UID:", uid);
 
-    this.toastr.success("Logged in successfully ✅");
+    this.apiservice.getUserbyId(uid).subscribe({
 
-    this.ResetForm();
+      next: (res:any) => {
+        console.log("User Data:", res);
 
-    // ✅ Step 3: Navigate
-    this.router.navigate(['/dashboard']);
+        if(!res){
+          this.toastr.error("User data not found ❌");
+          this.spinner.hide();
+          return;
+        }
+
+        localStorage.setItem('user', JSON.stringify({
+          uid: uid,
+          ...res
+        }));
+
+        this.toastr.success("Logged in successfully ✅");
+
+        this.ResetForm();
+
+        this.spinner.hide();
+
+        this.router.navigate(['/dashboard']);
+      },
+
+      error: (err) => {
+        console.log(err);
+        this.toastr.error("Failed to fetch user data ❌");
+        this.spinner.hide();
+      }
+
+    });
 
   } catch (error:any) {
 
     console.log(error);
     this.toastr.error(error.message || "Login failed ❌");
 
-  } finally {
-
-    // ✅ Step 4: Always stop loader
-    this.loading = false;
     this.spinner.hide();
+    this.loading = false;
   }
 }
 ResetForm(){

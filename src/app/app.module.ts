@@ -16,6 +16,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SigninComponent } from './signin/signin.component'; 
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ProfileComponent } from './profile/profile.component';
+import { AttendenceComponent } from './attendence/attendence.component';
+import { AdminComponent } from './admin/admin.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     HomeComponent,
     WorkspaceComponent,
     DashboardComponent,
-    SigninComponent
+    SigninComponent,
+    ProfileComponent,
+    AttendenceComponent,
+    AdminComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

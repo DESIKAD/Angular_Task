@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<div class="app-wrapper" *ngIf="showSidebar()"> 
+    <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🔥</div>
+      Angular
+    </div>
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active"><i class="nav-icon">📊</i> Dashboard</a>
+      <a routerLink="/profile" routerLinkActive="active"><i class="nav-icon">👤</i> My Profile</a>
+      <a routerLink="/user" routerLinkActive="active"><i class="nav-icon">👥</i> User</a>
+      <a routerLink="/admin" routerLinkActive="active"><i class="nav-icon">🛡️</i> Admin</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" (click)="logout()">
+        <i class="nav-icon">🚪</i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
+
+<router-outlet *ngIf="!showSidebar()"></router-outlet>

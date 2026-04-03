@@ -21,43 +21,60 @@ export class AdminComponent implements OnInit{
     this.fetchTodaysAttendance();
   }
 
-  fetchTodaysAttendance() {
-    const dateKey = new Date().toISOString().split('T')[0]; // e.g. "2026-03-27"
+fetchTodaysAttendance() {
+  const dateKey = new Date().toISOString().split('T')[0];
 
-    this.apiService.allUsers().subscribe({
-      next: (res: any) => {
-        this.attendanceRecords = []; // Clear array
+  this.apiService.allUsers().subscribe({
+    next: (res: any) => {
+      const allSessions: any[] = []; 
 
-        if (res && res.UserDetails) {
-          const usersData = Object.values(res.UserDetails);
+      if (res && res.UserDetails) {
+        const usersData = Object.values(res.UserDetails);
 
-          // Loop through every user in the database
-          usersData.forEach((user: any) => {
-            // Check if they have an attendance record for TODAY
-            if (user.Attendance && user.Attendance[dateKey]) {
-              const record = user.Attendance[dateKey];
+        usersData.forEach((user: any) => {
+          if (user.Attendance && user.Attendance[dateKey]) {
+            const dailyData = user.Attendance[dateKey];
 
-              this.attendanceRecords.push({
-                name: record.name,
-                id: user.uid ? user.uid.substring(0, 8).toUpperCase() : 'N/A', // Shortened ID
-                clockIn: record.clockIn || '--:--',
-                clockOut: record.clockOut || '--:--',
-                duration: this.calculateDuration(record.clockIn, record.clockOut),
-                overtime: '-', // You can add logic for this later
+            // 1. Check if dailyData is a collection of sessions or just one record
+            // If it has 'clockIn' or 'time' directly, it's a single (old) record.
+            let sessions: any[] = [];
+            
+            if (dailyData.clockIn || dailyData.time) {
+              sessions = [dailyData]; // Wrap single record in an array
+            } else {
+              sessions = Object.values(dailyData); // It's the new multi-session format
+            }
+
+            // 2. Loop through the sessions found for THIS user
+            sessions.forEach((record: any) => {
+              // We check multiple keys (clockIn OR time) to make sure we don't get --:--
+              const startTime = record.clockIn || record.time || '--:--';
+              const endTime = record.clockOut || '--:--';
+
+              allSessions.push({
+                name: record.name || user.name || 'Unknown',
+                id: user.uid ? user.uid.substring(0, 8).toUpperCase() : 'N/A',
+                clockIn: startTime,
+                clockOut: endTime,
+                duration: this.calculateDuration(startTime, endTime),
+                overtime: '-',
                 picture: record.photoBase64,
                 workMode: record.workMode || 'Office',
-                gpsLocation: record.gpsLocation,
-                note: record.note || 'No notes provided',
-                status: record.clockIn > '09:30:00' ? 'late' : 'on-time' // Flags late if after 9:30 AM
+                // Handle different GPS formats
+                gpsLocation: record.gpsLocation || { lat: record.latitude, lng: record.longitude },
+                note: record.note || 'No notes',
+                status: record.status || (startTime > '09:30:00' ? 'late' : 'on-time')
               });
-            }
-          });
-        }
-      },
-      error: (err) => console.error("Error fetching attendance:", err)
-    });
-  }
-
+            });
+          }
+        });
+      }
+      
+      this.attendanceRecords = allSessions;
+    },
+    error: (err) => console.error("Error fetching attendance:", err)
+  });
+}
   // --- MAP HELPER ---
   openMap(lat: number | null, lng: number | null) {
     if (lat && lng) {

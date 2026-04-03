@@ -1,21 +1,30 @@
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ApiService } from '../service/api.service';
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // 1. Import Firebase Auth
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+interface AttendanceRecord {
+  clockIn: string;
+  clockOut: string | null;
+  workMode: string;
+  note: string;
+  status: string;
+}
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
+
+
 export class UserComponent implements OnInit, OnDestroy {
 
-  // --- Real-time User Data Variables ---
-  AuthUid: string = '';    // The Firebase Authentication UID
-  DbKey: string = '';      // The Realtime Database Node Key (e.g., -Nx...)
-  userName: string = 'Loading...'; 
-  userData: any = null;
   
-  // --- Time & Attendance Variables ---
+  AuthUid: string = '';
+  DbKey: string = '';
+  userName: string = 'Loading...';
+  userData: any = null;
+  attendanceRecords: any[] = []; // Added missing property
+
   currentTime: Date = new Date();
   isCheckedIn: boolean = false;
   checkInTime: Date | null = null;
@@ -23,7 +32,6 @@ export class UserComponent implements OnInit, OnDestroy {
   workLocation: string = 'Office';
   dailyNote: string = '';
 
-  // --- Camera Variables ---
   showCamera: boolean = false;
   capturedImage: string | null = null;
   mediaStream: MediaStream | null = null;
@@ -34,19 +42,14 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    // 1. Keep the live clock ticking
-    setInterval(() => {
-      this.currentTime = new Date();
-    }, 1000);
+    setInterval(() => { this.currentTime = new Date(); }, 1000);
 
-    // 2. Real-time Auth Listener (Same as your Profile logic!)
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.AuthUid = user.uid;
-        this.fetchCurrentUserData(); // Fetch data once we know who is logged in
+        this.fetchCurrentUserData();
       } else {
-        console.log("No user logged in");
         this.userName = 'Guest';
       }
     });
@@ -57,108 +60,73 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   fetchCurrentUserData() {
-    this.apiService.allUsers().subscribe((res: any) => {
-      if (res && res.UserDetails) {
-        const data = res.UserDetails;
-        const dbKeys = Object.keys(data); 
+  this.apiService.allUsers().subscribe((res: any) => {
+    if (res && res.UserDetails) {
+      const data = res.UserDetails;
+      const dbKeys = Object.keys(data);
+      
+      let foundUser = null;
+      let foundDbKey = '';
+
+      for (const key of dbKeys) {
+        if (data[key].uid === this.AuthUid) {
+          foundUser = data[key];
+          foundDbKey = key;
+          break;
+        }
+      }
+
+      if (foundUser) {
+        this.userData = foundUser;
+        this.userName = foundUser.name;
+        this.DbKey = foundDbKey;
+
+        // 🔥 SEARCH FOR ACTIVE SESSION
+        const dateKey = this.currentTime.toISOString().split('T')[0];
         
-        let foundUser = null;
-        let foundDbKey = '';
-
-        // Loop through to find the user matching our Auth UID
-        for (const key of dbKeys) {
-          if (data[key].uid === this.AuthUid) {
-            foundUser = data[key];
-            foundDbKey = key; 
-            break;
-          }
-        }
-
-        if (foundUser) {
-          this.userData = foundUser;
-          this.userName = foundUser.name; 
-          this.DbKey = foundDbKey;        
-
-          // 🔥 NEW LOGIC: Check Firebase for today's status!
-          const dateKey = this.currentTime.toISOString().split('T')[0]; // Gets 'YYYY-MM-DD'
+        if (foundUser.Attendance && foundUser.Attendance[dateKey]) {
+          const dailySessions = foundUser.Attendance[dateKey];
           
-          // Does the user have an attendance folder for today?
-          if (foundUser.Attendance && foundUser.Attendance[dateKey]) {
-            const todaysRecord = foundUser.Attendance[dateKey];
+          // Use Object.entries to get [sessionId, data] pairs
+          const sessionEntries = Object.entries(dailySessions);
+          
+          // Find a session where the status is 'working'
+          const activeEntry = sessionEntries.find(([id, record]) => {
+            const r = record as AttendanceRecord;
+            return r.status === 'working';
+          });
+
+          if (activeEntry) {
+            const [sessionId, recordData] = activeEntry;
+            const record = recordData as AttendanceRecord;
+
+            // Update UI state
+            this.isCheckedIn = true;
+            this.checkInTime = new Date(`1970-01-01T${record.clockIn}Z`);
+            this.workLocation = record.workMode || 'Office';
+            this.dailyNote = record.note || '';
             
-            // If they have a clockIn but NO clockOut, they are still working!
-            if (todaysRecord.clockIn && !todaysRecord.clockOut) {
-              this.isCheckedIn = true; // Flips the UI to "Clocked In"
-              
-              // Restore their data from Firebase back to the UI
-              this.checkInTime = new Date(todaysRecord.clockIn); // Converts your timestamp back to a Date object
-              this.workLocation = todaysRecord.workMode || 'Office';
-              this.dailyNote = todaysRecord.note || '';
-            } 
-            // If they already clocked out today, it safely stays false.
+            // Re-sync the sessionId to localStorage for Clock-Out
+            localStorage.setItem('currentSessionId', sessionId);
+            
+            console.log("Active session restored:", sessionId);
           }
-
-          console.log("Attendance user ready:", this.userData);
-        } else {
-          this.userName = 'Unknown User';
         }
       }
-    });
-  }
-
-  // --- GEOLOCATION HELPER ---
-  getUserLocation(): Promise<{lat: number | null, lng: number | null}> {
-    return new Promise((resolve) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
-          (error) => resolve({ lat: null, lng: null })
-        );
-      } else {
-        resolve({ lat: null, lng: null });
-      }
-    });
-  }
-
-  // --- CLOCK OUT LOGIC ---
- toggleAttendance() {
-    if (!this.isCheckedIn) {
-      this.showCamera = true;
-      this.startCamera();
-    } else {
-      this.checkOutTime = new Date();
-      this.isCheckedIn = false;
-      this.dailyNote = ''; 
-      
-      const dateKey = this.currentTime.toISOString().split('T')[0]; 
-      
-      // 🔥 Get the exact 00:00:00 format
-      const formattedClockOut = this.checkOutTime.toTimeString().split(' ')[0];
-
-      const updateData = {
-        clockOut: formattedClockOut, // <--- Send the formatted string here
-        status: 'completed'
-      };
-
-this.apiService.updateAttendance(this.DbKey, dateKey, updateData).subscribe({
-        next: (res) => {
-          console.log('Successfully Clocked Out!', res);
-        },
-        error: (err) => {
-          console.error('Error clocking out:', err);
-        }
-      });    }
-  }
-
-async confirmClockIn() {
+    }
+  });
+}
+  async confirmClockIn() {
     this.isCheckedIn = true;
     this.checkInTime = new Date();
     this.showCamera = false;
     
     const coords = await this.getUserLocation();
     const dateKey = this.currentTime.toISOString().split('T')[0]; 
-    
     const formattedClockIn = this.checkInTime.toTimeString().split(' ')[0];
+
+    const sessionID = new Date().getTime().toString(); 
+    localStorage.setItem('currentSessionId', sessionID);
 
     const attendanceRecord = {
       name: this.userName, 
@@ -172,27 +140,69 @@ async confirmClockIn() {
       gpsLocation: coords 
     };
 
-this.apiService.markAttendance(this.DbKey, dateKey, attendanceRecord).subscribe({
-      next: (res) => {
-        console.log('Clock In Saved to Firebase!', res);
-      },
-      error: (err) => {
-        console.error('Failed to save to Firebase:', err);
-      }
-    });  }
+    this.apiService.markAttendance(this.DbKey, dateKey, attendanceRecord, sessionID).subscribe({
+      next: (res) => console.log('Clock In Saved:', sessionID),
+      error: (err) => console.error('Failed to save:', err)
+    });
+  }
 
-  // --- CAMERA METHODS (Unchanged) ---
+  toggleAttendance() {
+    if (!this.isCheckedIn) {
+      this.showCamera = true;
+      this.startCamera();
+    } else {
+      this.checkOutTime = new Date();
+      this.isCheckedIn = false;
+      
+      const dateKey = this.currentTime.toISOString().split('T')[0]; 
+      const formattedClockOut = this.checkOutTime.toTimeString().split(' ')[0];
+      const sessionID = localStorage.getItem('currentSessionId');
+
+      const updateData = {
+        clockOut: formattedClockOut,
+        status: 'completed'
+      };
+
+      if (sessionID) {
+        this.apiService.updateAttendance(this.DbKey, dateKey, updateData, sessionID).subscribe({
+          next: (res) => {
+            console.log('Successfully Clocked Out!');
+            localStorage.removeItem('currentSessionId');
+            this.dailyNote = ''; 
+          },
+          error: (err) => console.error('Error clocking out:', err)
+        });
+      }
+    }
+  }
+
+  // --- HELPERS ---
+  calculateDuration(inTime: string, outTime: string): string {
+    if (!inTime || !outTime || inTime === '--:--' || outTime === '--:--') return '-';
+    const d1 = new Date(`1970-01-01T${inTime}Z`);
+    const d2 = new Date(`1970-01-01T${outTime}Z`);
+    let diffMs = d2.getTime() - d1.getTime();
+    return diffMs < 0 ? '-' : `${Math.floor(diffMs / 3600000)}h ${Math.floor((diffMs % 3600000) / 60000)}m`;
+  }
+
+  getUserLocation(): Promise<{lat: number | null, lng: number | null}> {
+    return new Promise((resolve) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+          () => resolve({ lat: null, lng: null })
+        );
+      } else resolve({ lat: null, lng: null });
+    });
+  }
+
+  // --- CAMERA METHODS ---
   async startCamera() {
     try {
       this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      setTimeout(() => {
-        if (this.videoElement) {
-          this.videoElement.nativeElement.srcObject = this.mediaStream;
-        }
-      }, 0);
+      setTimeout(() => { if (this.videoElement) this.videoElement.nativeElement.srcObject = this.mediaStream; }, 0);
     } catch (err) {
-      console.error("Error accessing camera:", err);
-      alert("Could not access camera. Please allow camera permissions in your browser.");
+      alert("Camera access denied");
       this.showCamera = false;
     }
   }
@@ -200,22 +210,10 @@ this.apiService.markAttendance(this.DbKey, dateKey, attendanceRecord).subscribe(
   captureImage() {
     const video = this.videoElement.nativeElement;
     const canvas = this.canvasElement.nativeElement;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
     canvas.getContext('2d')?.drawImage(video, 0, 0);
     this.capturedImage = canvas.toDataURL('image/png');
     this.stopCamera(); 
-  }
-
-  retakeImage() {
-    this.capturedImage = null;
-    this.startCamera();
-  }
-
-  cancelCamera() {
-    this.stopCamera();
-    this.showCamera = false;
-    this.capturedImage = null;
   }
 
   stopCamera() {
@@ -224,6 +222,6 @@ this.apiService.markAttendance(this.DbKey, dateKey, attendanceRecord).subscribe(
       this.mediaStream = null;
     }
   }
-
-  
+  retakeImage() { this.capturedImage = null; this.startCamera(); }
+  cancelCamera() { this.stopCamera(); this.showCamera = false; this.capturedImage = null; }
 }

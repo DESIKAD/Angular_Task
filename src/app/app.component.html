@@ -1,15 +1,32 @@
 <div class="app-wrapper" *ngIf="showSidebar()"> 
-    <aside class="sidebar">
+  <aside class="sidebar">
     <div class="logo">
       <div class="logo-icon">🔥</div>
       Angular
     </div>
+
     <nav>
-      <a routerLink="/dashboard" routerLinkActive="active"><i class="nav-icon">📊</i> Dashboard</a>
-      <a routerLink="/profile" routerLinkActive="active"><i class="nav-icon">👤</i> My Profile</a>
-      <a routerLink="/user" routerLinkActive="active"><i class="nav-icon">👥</i> User</a>
-      <a routerLink="/admin" routerLinkActive="active"><i class="nav-icon">🛡️</i> Admin</a>
+      <!-- ADMIN SECTION -->
+      <ng-container *ngIf="userRole === 'Admin'">
+        <a routerLink="/dashboard" routerLinkActive="active">
+          <i class="nav-icon">📊</i> Dashboard
+        </a>
+        <a routerLink="/admin" routerLinkActive="active">
+          <i class="nav-icon">🛡️</i> Admin
+        </a>
+      </ng-container>
+
+      <!-- COMMON/USER SECTION -->
+      <a routerLink="/profile" routerLinkActive="active">
+        <i class="nav-icon">👤</i> My Profile
+      </a>
+
+      <!-- Keep this here if 'User' is the page where they Clock In/Out -->
+      <a routerLink="/user" routerLinkActive="active">
+        <i class="nav-icon">👥</i> Attendance
+      </a>
     </nav>
+
     <div class="sidebar-bottom">
       <button class="logout-btn" (click)="logout()">
         <i class="nav-icon">🚪</i> Logout
@@ -20,7 +37,7 @@
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>
-
 </div>
 
+<!-- Login/Signin/Home Pages -->
 <router-outlet *ngIf="!showSidebar()"></router-outlet>

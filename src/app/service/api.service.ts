@@ -9,8 +9,6 @@ export class ApiService {
 
 constructor(private http:HttpClient){}          
 
-
-
 allUsers(){           
     return this.http.get(`${this.dbUrl}.json`)
 }
@@ -36,10 +34,13 @@ getUserbyId(uid: string){
   
   return this.http.get(`${this.dbUrl}/UserDetails/${uid}.json`);
 }
-markAttendance(uid: any, date: string, data: any) {
-    return this.http.put(`${this.dbUrl}/UserDetails/${uid}/Attendance/${date}.json`, data);
-  }
-  updateAttendance(uid: any, date: string, data: any) {
-    return this.http.patch(`${this.dbUrl}/UserDetails/${uid}/Attendance/${date}.json`, data);
-  }
+// In your api.service.ts
+markAttendance(dbKey: string, dateKey: string, data: any, sessionID: string) {
+  return this.http.put(`${this.dbUrl}/UserDetails/${dbKey}/Attendance/${dateKey}/${sessionID}.json`, data);
+}
+
+updateAttendance(dbKey: string, dateKey: string, data: any, sessionID: string) {
+  // Use PATCH so we only update clockOut/status and don't delete the clockIn data
+  return this.http.patch(`${this.dbUrl}/UserDetails/${dbKey}/Attendance/${dateKey}/${sessionID}.json`, data);
+}
 }

@@ -10,7 +10,7 @@ import { AdminComponent } from './admin/admin.component';
 import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
-  {path:'', redirectTo:'home', pathMatch:'full'},
+  {path:'#', redirectTo:'home', pathMatch:'full'},
   {path:'workspace',component:WorkspaceComponent},
   {path:'home',component:HomeComponent},
   {path:'dashboard',component:DashboardComponent},

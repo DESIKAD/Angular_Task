@@ -18,4 +18,5 @@ signin(email:string,password:string){
 logout(){
   return signOut(this.auth)
 }
+
 }

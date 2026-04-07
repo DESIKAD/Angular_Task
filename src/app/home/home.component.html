@@ -31,7 +31,7 @@
         </select>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Gender</label>
         <div class="options-group">
           <label class="option-item"><input type="radio" value="male" [(ngModel)]="gender" name="genders" > Male</label>
@@ -48,19 +48,40 @@
           <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Javascript')"> JS</label>
           <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Angular')"> Angular</label>
         </div>
-      </div>
+      </div> -->
 
+      <div class="form-group">
+  <label>Gender</label>
+  <div class="options-group">
+    <label class="option-item">
+      <input type="radio" value="male" [(ngModel)]="gender" name="userGender"> Male
+    </label>
+    <label class="option-item">
+      <input type="radio" value="female" [(ngModel)]="gender" name="userGender"> Female
+    </label>
+    <label class="option-item">
+      <input type="radio" value="other" [(ngModel)]="gender" name="userGender"> Other
+    </label>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>Skills</label>
+  <div class="options-group">
+    <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Html')"> HTML</label>
+    <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'CSS')"> CSS</label>
+    <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Javascript')"> JS</label>
+    <label class="option-item"><input type="checkbox" (change)="Onchecked($event, 'Angular')"> Angular</label>
+  </div>
+</div>
 
      <div class="form-group">
         <label for="profile-img">Profile Picture</label>
         <input type="file" id="profile-img" accept="image/*" (change)="onFileChange($event)">
       </div>
-      <div *ngIf="previewUrl">
+    <div *ngIf="previewUrl" class="preview-section">
   <p>Image Preview:</p>
-  <img [src]="previewUrl" style="width: 200px; border-radius: 8px;">
-  
-  <br>
-  <a [href]="previewUrl" target="_blank">View Full Image Link</a>
+  <img [src]="previewUrl">
 </div>
       <button type="submit">Register Now</button>
       <div class="btn-align">

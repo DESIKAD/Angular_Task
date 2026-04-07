@@ -86,16 +86,7 @@ fetchTodaysAttendance() {
     }
   }
 
-  // --- PHOTO HELPER ---
-  viewPhoto(base64Str: string) {
-    if (base64Str) {
-      // Opens the base64 image in a new tab
-      const win = window.open();
-      win?.document.write(`<img src="${base64Str}" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">`);
-    } else {
-      alert("No photo available for this record.");
-    }
-  }
+
 
   // --- TIME MATH HELPER ---
   calculateDuration(inTime: string, outTime: string): string {
@@ -113,4 +104,24 @@ fetchTodaysAttendance() {
     
     return `${hours}h ${minutes}m`;
   }
+
+
+  // Add these variables to your class
+showPhotoModal: boolean = false;
+selectedPhoto: string = '';
+
+// Update the viewPhoto helper
+viewPhoto(base64Str: string) {
+  if (base64Str) {
+    this.selectedPhoto = base64Str;
+    this.showPhotoModal = true;
+  } else {
+    alert("No photo available for this record.");
+  }
+}
+
+closePhotoModal() {
+  this.showPhotoModal = false;
+  this.selectedPhoto = '';
+}
 }

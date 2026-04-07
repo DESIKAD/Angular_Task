@@ -256,3 +256,99 @@ $border-color: #e2e8f0;
   position: relative; 
   overflow: hidden; /* Keeps the overlay's border-radius clean inside the card */
 }
+
+
+/* --- MOBILE RESPONSIVE UPDATES --- */
+
+@media (max-width: 500px) {
+  .attendance-wrapper {
+    padding: 10px; /* Less space around the card on small screens */
+    align-items: flex-start; /* Better for scrolling if content is long */
+    min-height: calc(100vh - 60px); 
+  }
+
+  .attendance-card {
+    padding: 24px 20px; /* Tighten internal padding */
+    max-width: 100%; 
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); /* Lighter shadow for mobile */
+  }
+
+  .card-header {
+    h2 { font-size: 1.3rem; }
+    .date { font-size: 0.85rem; }
+  }
+
+  .time-display {
+    margin-bottom: 20px;
+
+    .clock {
+      font-size: 2.8rem; /* Scaled down clock so it doesn't wrap */
+      margin-bottom: 12px;
+    }
+  }
+
+  .status-badge {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .divider {
+    margin: 20px 0;
+  }
+
+  .form-section {
+    .form-group {
+      label { font-size: 0.7rem; }
+      input, select { 
+        padding: 10px 14px; 
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .timestamps {
+    padding: 12px;
+    margin-bottom: 20px;
+    
+    .time-block {
+      .label { font-size: 0.65rem; }
+      .time { font-size: 0.95rem; }
+    }
+  }
+
+  /* ── MOBILE CAMERA UI ── */
+  .camera-overlay {
+    .camera-container {
+      padding: 15px;
+      
+      h3 { font-size: 1.2rem; }
+    }
+
+    .video-wrapper {
+      width: 200px; /* Scaled down for smaller phone screens */
+      height: 200px;
+      margin-bottom: 20px;
+    }
+
+    .camera-actions {
+      flex-direction: column; /* Stack buttons vertically on very small phones */
+      gap: 8px;
+
+      button {
+        padding: 14px; /* Larger touch targets for fingers */
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* Landscape Mode Fix (For when users rotate their phone) */
+@media (max-height: 600px) and (orientation: landscape) {
+  .attendance-wrapper {
+    align-items: flex-start;
+  }
+  .attendance-card {
+    margin-top: 20px;
+  }
+}

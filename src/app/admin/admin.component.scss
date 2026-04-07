@@ -313,3 +313,182 @@ $color-neg: #e53e3e; /* Red for negative trend */
   text-overflow: ellipsis; /* Adds the "..." */
   cursor: default;
 }
+
+
+/* ── MOBILE RESPONSIVE UPDATES ── */
+
+@media (max-width: 992px) {
+  .attendance-container {
+    padding: 20px 15px; /* Reduced padding for tablets */
+  }
+
+  /* Summary Cards: 3 columns -> 1 column */
+  .summary-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Header: Stack elements vertically */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+
+    .header-left {
+      width: 100%;
+      justify-content: space-between;
+      h1 { font-size: 1.25rem; }
+    }
+
+    .header-right {
+      width: 100%;
+      button { flex: 1; text-align: center; padding: 10px 5px; font-size: 0.8rem; }
+    }
+  }
+
+  /* Filters: Stack search and buttons */
+  .filters-bar {
+    flex-direction: column;
+    gap: 12px;
+
+    .filters-left {
+      flex-direction: column;
+      width: 100%;
+      
+      .search-box { width: 100%; box-sizing: border-box; }
+      .filter-btn { width: 100%; justify-content: center; }
+    }
+    
+    .filters-right {
+      display: none; /* Hide view toggles on small mobile to save space */
+    }
+  }
+
+  /* TABLE RESPONSIVE: The most critical part */
+  .table-container {
+    overflow-x: auto; /* Enable horizontal swipe */
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    margin: 0 -5px; /* Slight bleed for better edge-to-edge feel */
+  }
+
+  table {
+    min-width: 850px; /* Forces the table to maintain its structure while scrolling */
+    
+    th, td {
+      padding: 12px 10px; /* Tighter padding for mobile */
+      font-size: 0.8rem;
+    }
+
+    .employee-info {
+      .emp-avatar { width: 30px; height: 30px; font-size: 0.8rem; }
+      .emp-name { font-size: 0.85rem; }
+    }
+
+    /* Shrink the timeline for mobile */
+    .clock-timeline .duration-line {
+      width: 50px;
+    }
+  }
+
+  /* Fixed Action Buttons for smaller screens */
+  .action-btn {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ── IMAGE MODAL UI ── */
+.photo-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.8); /* Dark slate overlay */
+  backdrop-filter: blur(8px); /* Modern blur effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.photo-modal-card {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .modal-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+
+    h3 { margin: 0; font-size: 1.1rem; color: #1e293b; font-weight: 700; }
+    .close-btn { 
+      background: #f1f5f9; border: none; width: 32px; height: 32px; 
+      border-radius: 50%; cursor: pointer; color: #64748b;
+      transition: all 0.2s;
+      &:hover { background: #e2e8f0; color: #0f172a; }
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      max-height: 70vh;
+      display: block;
+      /* If your camera was mirrored, un-mirror it here for the admin */
+      transform: scaleX(-1); 
+    }
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    text-align: center;
+    background: #f8fafc;
+
+    .btn-download {
+      background: #3d8072;
+      color: white;
+      border: none;
+      padding: 10px 32px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      &:hover { opacity: 0.9; }
+    }
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .photo-modal-card {
+    width: 95%;
+    .modal-body img {
+      max-height: 60vh;
+    }
+  }
+}

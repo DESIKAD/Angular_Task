@@ -31,47 +31,44 @@ constructor(private sanitizer: DomSanitizer,private toastr: ToastrService,privat
   }
 
 async OnSubmit() {
+  if (!this.name || !this.email || !this.role || !this.gender) {
+    this.toastr.warning("Fill all fields bro! ⚠️");
+    return;
+  }
+
   try {
-
-                     this.spinner.show();
-
-    // 1. Handle Authentication first
+    this.spinner.show();
     const userAuth = await this.authService.register(this.email, this.password);
     const uid = userAuth.user.uid;
 
-    // 2. Prepare the object
     const userObj = {
       uid: uid, 
       name: this.name,
       email: this.email,
       skills: this.skills, 
-      phone_no:this.phone_no,
-      profile_img: this.profile_img,
+      phone_no: this.phone_no,
+      profile_img: this.profile_img, // Now Base64
       role: this.role,
-      password:this.password
+      gender: this.gender, // Fixed
+      password: this.password
     };
 
-      this.apiService.createUserProfile(uid, userObj).subscribe({
- next: () => {
-    console.log("Saved with UID");
-         
-        this.toastr.success('Profile created successfully!', 'Success');
+    this.apiService.createUserProfile(uid, userObj).subscribe({
+      next: () => {
+        this.toastr.success('Profile created successfully! 🔥');
         this.resetForm();
-
-                     this.router.navigate(['/signin']);
-                     this.spinner.hide()
-
+        this.spinner.hide();
+        this.router.navigate(['/signin']);
       },
-    error: (err) => {
-        this.toastr.error('Failed to save profile data', 'API Error');
-              this.spinner.hide();
-
+      error: (err) => {
+        this.toastr.error('API Error bro: ' + err.message);
+        this.spinner.hide();
       }
     });
 
   } catch (error: any) {
     this.toastr.error(error.message, 'Auth Error');
-    this.spinner.hide()
+    this.spinner.hide();
   }
 }
 
@@ -98,13 +95,17 @@ Onchecked(event: any, skillName: string) {
 onFileChange(event: any) {
   const file = event.target.files[0];
   if (file) {
+    // For Preview (This is fine)
     const unsafeUrl = URL.createObjectURL(file);
-    
     this.previewUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeUrl);
-    
-    this.profile_img = unsafeUrl; 
 
-    console.log("Local Path assigned:", this.profile_img);
+    // For Database (Convert to Base64)
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profile_img = reader.result as string; // Save THIS to userObj
+      console.log("Base64 string ready for DB");
+    };
+    reader.readAsDataURL(file);
   }
 }
 

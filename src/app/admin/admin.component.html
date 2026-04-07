@@ -177,3 +177,18 @@
 
 
 
+<!-- ── IMAGE PREVIEW MODAL ── -->
+<div class="photo-modal-overlay" *ngIf="showPhotoModal" (click)="closePhotoModal()">
+  <div class="photo-modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Identity Verification</h3>
+      <button class="close-btn" (click)="closePhotoModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <img [src]="selectedPhoto" alt="Employee Clock-in Photo">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-download" (click)="closePhotoModal()">Close View</button>
+    </div>
+  </div>
+</div>

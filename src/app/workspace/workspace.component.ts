@@ -14,37 +14,38 @@ export class WorkspaceComponent {
 
 
 
-  skillList:any[]=[];
+//   skillList:any[]=[];
   
-CheckedItem(event:any,skillName:string ){
+// CheckedItem(event:any,skillName:string ){
  
-  let isChecked = event.target.checked;
+//   let isChecked = event.target.checked;
 
-  if(isChecked){
+//   if(isChecked){
 
-    this.skillList.push(skillName)
+//     this.skillList.push(skillName)
 
-  }
+//   }
 
-  else{
-    this.skillList= this.skillList.filter(skill => skill !== skillName)
-  }
+//   else{
+//     this.skillList= this.skillList.filter(skill => skill !== skillName)
+//   }
 
-  console.log(this.skillList);
+//   console.log(this.skillList);
   
-}
-}
+// }
+// }
 
 
-let arr:any[]=[{name:"jagan",age:25},{name:"desika",age:22},{name:"Arun",age:23}];
-let allValues:any[] =[]
-for(let i of arr){
-    let justvalues = Object.values(i)
-    allValues.push(...justvalues)
+// let arr:any[]=[{name:"jagan",age:25},{name:"desika",age:22},{name:"Arun",age:23}];
+// let allValues:any[] =[]
+// for(let i of arr){
+//     let justvalues = Object.values(i)
+//     allValues.push(...justvalues)
 
     // let data = arr.flatMap(i=>Object.values(i))
     // console.log(data)
 
-}
-console.log(allValues);
+// }
+// console.log(allValues);
 
+}

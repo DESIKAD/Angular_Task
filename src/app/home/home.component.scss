@@ -1,86 +1,168 @@
-.container{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
+/* Modern CSS Variables for easy theme management */
+:host {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --input-focus: #764ba2;
+    --bg-light: #f8f9fa;
+}
 
-        .form-container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 450px;
-        }
+.container {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; // Reduced for mobile
+    box-sizing: border-box;
+}
+// 
+// .container {
+//     position: relative;
+//     z-index: 9999 !important;
+//     display: block !important;
+// }
+.form-container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 480px;
+    transition: transform 0.3s ease;
 
-        h2 {
-            text-align: center;
-            color: var(--text-color);
-            margin-bottom: 25px;
-        }
+    h2 {
+        text-align: center;
+        color: #2d3436;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+        font-weight: 800;
+    }
+}
 
-         .btn-align{
-            display: flex;
-            justify-content: center;
-        }
+.form-group {
+    margin-bottom: 22px;
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #4a4a4a;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="file"],
+    select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e1e1e1;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        outline: none;
 
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],input[type="tel"],
-        input[type="file"],select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        &:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
         }
+    }
+}
 
-        /* Radio & Checkbox Styling */
-        .options-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            padding-top: 5px;
-        }
+/* Enhancing Radio & Checkbox layouts */
+.options-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); // Two columns on desktop
+    gap: 12px;
+    background: var(--bg-light);
+    padding: 15px;
+    border-radius: 10px;
+}
 
-        .option-item {
-            display: flex;
-            align-items: center;
-            font-weight: normal;
-            cursor: pointer;
-        }
+.option-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    cursor: pointer;
+    
+    input {
+        accent-color: var(--input-focus); // Modern checkbox color
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+    }
+}
 
-        .option-item input {
-            margin-right: 8px;
-        }
+/* Image Preview Styling */
+.preview-section {
+    text-align: center;
+    margin: 20px 0;
+    
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%; // Circular profile pic look
+        border: 3px solid var(--input-focus);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+}
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color:rgb(159, 211, 239);
-            color: rgb(254, 254, 254);
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+button {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: opacity 0.3s, transform 0.2s;
 
-        button:hover {
-            background-color: #357abd;
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.btn-align {
+    margin-top: 20px;
+    text-align: center;
+    
+    a {
+        color: #764ba2;
+        font-weight: 600;
+        font-size: 0.9rem;
+        &:hover {
+            text-decoration: underline;
         }
+    }
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .form-container {
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+
+    .options-group {
+        grid-template-columns: 1fr; // Stack options on small screens
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}

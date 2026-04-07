@@ -63,7 +63,7 @@ async loginData(){
 
         this.spinner.hide();
 
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/user']);
       },
 
       error: (err) => {

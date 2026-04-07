@@ -7,7 +7,6 @@ import { HomeComponent } from './home/home.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,7 +30,7 @@ import { UserComponent } from './user/user.component';
     ProfileComponent,
     AttendenceComponent,
     AdminComponent,
-    UserComponent
+    UserComponent,
   ],
   imports: [
     BrowserModule,

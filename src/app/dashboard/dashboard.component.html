@@ -1,377 +1,228 @@
-<!-- <div class="dashboard-wrapper">
-  <aside class="sidebar">
-    <div class="logo">Angular 🔥</div>
-    <nav>
-      <ul>
-        <li class="active"><i class="icon"></i><a>Dashboard</a> </li>
-        <li><i class="icon"></i><a routerLink="/profile" routerLinkActive="active"> My Profile</a></li>
-        <li><i class="icon"></i><a>User</a></li>
-        <li><i class="icon"></i><a >Admin</a> </li>
-       
-      </ul>
-    </nav>
-    <div class="logout"><a (click)="logout()" >Logout</a></div>
-  </aside>
-
-  <main class="content">
-    <header class="top-nav">
-      <h1>Admin Dashboard</h1>
-    </header>
-
-    <div class="stats-grid">
-      <div class="card total">
-        <h3>Total Users</h3>
-<p class="count">{{ stats.total }}</p>      </div>
-      <div class="card total">
-        <h3>Users</h3>
-<p class="count">{{ stats.user }}</p>      </div>
-      <div class="card admin">
-        <h3>Admins</h3>
-<p class="count">{{ stats.admin }}</p>      </div>
-      <div class="card general">
-        <h3>General</h3>
-<p class="count">{{ stats.general }}</p>      </div>
-      <div class="card others">
-        <h3>Others</h3>
-<p class="count">{{ stats.others }}</p>      </div>
-    </div>
-
-    <div class="filter-actions">
-      <button (click)="filterByRole('all')" class="btn btn-all">All Users</button>
-      <button (click)="filterByRole('user')" class="btn btn-all">Users</button>
-      <button (click)="filterByRole('admin')" class="btn btn-admin">Admins</button>
-      <button  (click)="filterByRole('general')"class="btn btn-general">General</button>
-      <button (click)="filterByRole('others')" class="btn btn-others">Others</button>
-    </div>
-
+<div class="dashboard-wrapper">
  
-     <section class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Skills</th>
-            <th>Actions &nbsp; <button class="btn btn-primary" (click)="showAddModal = true">Add Users</button></th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of filteredUsers; let i= index">
-          <td>{{i+1}}</td>
-          <td>{{user.id}}</td>
-  <td>{{ user.name }}</td>
-  <td>{{ user.email }}</td>
-  <td>{{ user.role }}</td>
-  <td>{{ user.skills?.join(', ') }}</td>
-<td><button class="btn btn-warning" (click)="openEditModal(user)" >Edit</button> &nbsp;
-<span><button class="btn btn-danger" (click)="deleteUser(user)">Delete</button></span></td>
-</tr>
 
-        </tbody>
-      </table>
-    </section>
-  
-  </main>
-</div>
-
-<div class="modal-overlay" *ngIf="showModal">
-  <div class="modal-card">
-    <h2>Edit User Details</h2>
-    
-    <div class="form-group">
-      <label>Name</label>
-      <input type="text" [(ngModel)]="selectedUser.name">
-    </div>
-
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" [(ngModel)]="selectedUser.email">
-    </div>
-
-    <div class="form-group">
-      <label>Role</label>
-      <select [(ngModel)]="selectedUser.role">
-        <option value="Admin">Admin</option>
-        <option value="General">General</option>
-        <option value="User">User</option>
-      </select>
-    </div>
-
-       <div class="form-group">
-  <label>Edit Skills</label>
-  <div class="modal-skills-grid">
-    <div *ngFor="let s of availableSkills" class="skill-item">
-      <input 
-        type="checkbox" 
-        [id]="'modal-' + s"
-        [checked]="hasSkill(s)" 
-        (change)="toggleModalSkill($event, s)">
-      <label [for]="'modal-' + s">{{ s }}</label>
-    </div>
-  </div>
-</div>
-    
-
-    <div class="modal-actions">
-      <button class="btn-cancel" (click)="showModal = false">Cancel</button>
-      <button class="btn-save" (click)="saveChanges()">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="showAddModal" class="modal-overlay">
-  <div class="modal-card">
-
-  <h2>Add User</h2>
-<div class="form-group">
-  <input [(ngModel)]="newUser.name" placeholder="Name"></div>
-  <div class="form-group">
-  <input [(ngModel)]="newUser.email" placeholder="Email"></div>
-  <div class="form-group">
-
-  <select [(ngModel)]="newUser.role">
-    <option value="">Select Role</option>
-    <option>Admin</option>
-    <option>User</option>
-    <option>General</option>
-  </select></div>
-
-  <div *ngFor="let skill of availableSkills">
-    <input type="checkbox"
-      (change)="toggleNewUserSkill($event, skill)">
-    {{ skill }}
-  </div>
-<div class="modal-actions">
-
-  <button (click)="addUser()">Save</button>
-  <button (click)="showAddModal = false">Cancel</button></div>
-  </div>
-</div>
-
-<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
-  <p style="font-size: 20px; color: white">Loading...</p>
-</ngx-spinner>
-
-
-
- 
- -->
-
-
-<div class="dashboard-wrapper">  
-  <!-- <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-icon">🔥</div>
-      Angular
-    </div>
-    <nav>
-      <a class="active"><i class="nav-icon">📊</i> Dashboard</a>
-      <a routerLink="/profile" routerLinkActive="active"><i class="nav-icon">👤</i> My Profile</a>
-      <a><i class="nav-icon">👥</i> User</a>
-      <a><i class="nav-icon">🛡️</i> Admin</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <button class="logout-btn" (click)="logout()">
-        <i class="nav-icon">🚪</i> Logout
-      </button>
-    </div>
-  </aside> -->
-
-<main class="main-area">
-      <header class="topbar">
-      <h1>Admin Dashboard</h1>
-      <div class="topbar-actions">
-        <button class="notification-btn">
-          🔔 <span class="badge"></span>
-        </button>
-        <div class="avatar">A</div>
+  <main class="main-content">
+    <header class="header-bar">
+      <h2>Admin Dashboard</h2>
+      <div class="header-right">
+        <!-- <span class="noti-bell">🔔</span>
+        <div class="user-avatar-top">A</div> -->
       </div>
     </header>
 
-<div class="content-area">
-<div class="stats-grid">
-          <div class="stat-card total">
-          <div class="stat-label">Total Users</div>
-          <div class="stat-value">{{ stats.total }}</div>
+    <div class="container-padding">
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <label>TOTAL USERS</label>
+          <div class="stat-value">{{stats.total}}</div>
+          <div class="stat-decoration blue"></div>
         </div>
         <div class="stat-card users">
-          <div class="stat-label">Users</div>
-          <div class="stat-value">{{ stats.user }}</div>
+          <label>USERS</label>
+          <div class="stat-value">{{stats.user}}</div>
+          <div class="stat-decoration green"></div>
         </div>
         <div class="stat-card admins">
-          <div class="stat-label">Admins</div>
-          <div class="stat-value">{{ stats.admin }}</div>
+          <label>ADMINS</label>
+          <div class="stat-value">{{stats.admin}}</div>
+          <div class="stat-decoration red"></div>
         </div>
         <div class="stat-card general">
-          <div class="stat-label">General</div>
-          <div class="stat-value">{{ stats.general }}</div>
+          <label>GENERAL</label>
+          <div class="stat-value">{{stats.general}}</div>
+          <div class="stat-decoration orange"></div>
         </div>
         <div class="stat-card others">
-          <div class="stat-label">Others</div>
-          <div class="stat-value">{{ stats.others }}</div>
+          <label>OTHERS</label>
+          <div class="stat-value">{{stats.others}}</div>
+          <div class="stat-decoration sky"></div>
         </div>
       </div>
 
-      <div class="filter-bar">
-        <span>Filter:</span>
-        <button (click)="filterByRole('all')" class="filter-btn active">All Users</button>
-        <button (click)="filterByRole('user')" class="filter-btn">Users</button>
-        <button (click)="filterByRole('admin')" class="filter-btn btn-admins">Admins</button>
-        <button (click)="filterByRole('general')" class="filter-btn btn-general">General</button>
-        <button (click)="filterByRole('others')" class="filter-btn btn-others">Others</button>
+      <div class="filter-section">
+        <span class="filter-label">FILTER:</span> &nbsp;
+        <button class="filter-btn" [class.active]="currentRoleFilter === 'all'" (click)="searchfilterByRole('all')">All Users</button>
+        <button class="filter-btn" [class.active]="currentRoleFilter === 'user'" (click)="searchfilterByRole('user')">Users</button>
+        <button class="filter-btn" [class.active]="currentRoleFilter === 'admin'" (click)="searchfilterByRole('admin')">Admins</button>
+        <button class="filter-btn" [class.active]="currentRoleFilter === 'general'" (click)="searchfilterByRole('general')">General</button>
+        <button class="filter-btn" [class.active]="currentRoleFilter === 'others'" (click)="searchfilterByRole('others')">Others</button>
       </div>
 
-      <section class="table-section">
-        <div class="table-header">
-          <h2>User Directory</h2>
-          <div class="search-box">
-            <span>🔍</span>
-            <input type="text" placeholder="Search users..."  (input)="searchUsers($event)">
+      <div class="table-card">
+        <div class="table-header-row">
+          <h3>User Directory</h3>
+          <div class="header-actions">
+            <div class="search-box">
+              <span>🔍</span>
+              <input type="text" placeholder="Search users..." (input)="searchUsers($event)">
+            </div>
+            <button class="add-user-btn" (click)="showAddModal = true">➕ Add User</button>
           </div>
-          <button class="add-btn" (click)="showAddModal = true">
-            <span>➕</span> Add User
-          </button>
         </div>
-        
-        <table>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>ID</th>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Skills</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of filteredUsers; let i = index">
-              <td class="sno">{{ i + 1 }}</td>
-              <td><span class="id-cell">#{{ user.id | slice:0:6 }}</span></td>
-              <td class="name-cell">
-                <div class="user-avatar">{{ user.name?.charAt(0) | uppercase }}</div>
-                <strong>{{ user.name }}</strong>
-              </td>
-              <td class="email-cell">{{ user.email }}</td>
-              <td>
-                <span class="role-badge" [ngClass]="{
-                  'role-admin': user.role === 'Admin',
-                  'role-user': user.role === 'User',
-                  'role-general': user.role === 'General',
-                  'role-other': user.role !== 'Admin' && user.role !== 'User' && user.role !== 'General'
-                }">{{ user.role || 'Unassigned' }}</span>
-              </td>
-              <td>
-                <div class="skills-cell">
-                  <span class="skill-chip" *ngFor="let skill of user.skills">{{ skill }}</span>
-                </div>
-              </td>
-              <td>
-                <div class="action-btns">
-                  <button class="btn-edit" (click)="openEditModal(user)">Edit</button>
-                  <button class="btn-del" (click)="deleteUser(user)">Delete</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+
+        <div class="table-responsive">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>ID</th>
+                <th>USER</th>
+                <th>EMAIL</th>
+                <th>ROLE</th>
+                <th>SKILLS</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td class="id-col">#{{ user.id | slice:0:6 }}</td>
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar-circle">{{ user.name?.charAt(0) | uppercase }}</div>
+                    <span class="user-name">{{ user.name }}</span>
+                  </div>
+                </td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="role-badge" [ngClass]="user.role?.toLowerCase()">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>
+                  <div class="skill-chips">
+                    <span class="skill-chip" *ngFor="let skill of user.skills">{{ skill }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn-edit" (click)="openEditModal(user)">Edit</button>
+                    <button class="btn-delete" (click)="deleteUser(user)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 </div>
 
-<div class="modal-overlay" [class.open]="showModal" *ngIf="showModal">
+<div class="modal-overlay" *ngIf="showModal || showAddModal">
+<div class="modal-overlay" *ngIf="showModal">
   <div class="modal-card">
-    <h2><span>✏️</span> Edit User Details</h2>
-    
-    <div class="form-group">
-      <label>Name</label>
-      <input type="text" [(ngModel)]="selectedUser.name">
-    </div>
+    <h2>Edit User</h2>
 
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" [(ngModel)]="selectedUser.email">
-    </div>
+    <!-- Wrap everything EXCEPT buttons in this scroll area -->
+    <div class="modal-scroll-area">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="selectedUser.name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" [(ngModel)]="selectedUser.email">
+      </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select [(ngModel)]="selectedUser.role">
+            <option value="">Select Role</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+            <option value="General">General</option>
+          </select>
+        </div>
 
-    <div class="form-group">
-      <label>Role</label>
-      <select [(ngModel)]="selectedUser.role">
-        <option value="Admin">Admin</option>
-        <option value="General">General</option>
-        <option value="User">User</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Edit Skills</label>
-      <div class="skills-grid">
-        <div *ngFor="let s of availableSkills" class="skill-check">
-          <input 
-            type="checkbox" 
-            [id]="'modal-edit-' + s"
-            [checked]="hasSkill(s)" 
-            (change)="toggleModalSkill($event, s)">
-          <label [for]="'modal-edit-' + s">{{ s }}</label>
+      <div class="form-group">
+        <label>Skills</label>
+        <div class="skills-grid-edit">
+          <div *ngFor="let skill of availableSkills" class="skill-checkbox">
+            <input type="checkbox" [id]="skill" (change)="toggleSkill('edit',skill)">
+            <label [for]="skill">{{ skill }}</label>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="modal-actions">
-      <button class="btn-cancel" (click)="showModal = false">Cancel</button>
-      <button class="btn-save" (click)="saveChanges()">Save Changes</button>
+      <button class="btn btn-secondary" (click)="showModal = false">Cancel</button>
+      <button class="btn btn-primary" (click)="saveChanges()">Save Changes</button>
     </div>
   </div>
 </div>
-
-<div class="modal-overlay" [class.open]="showAddModal" *ngIf="showAddModal">
-  <div class="modal-card">
+  <div class="modal-overlay" *ngIf="showAddModal">
+  <div class="modal-card wide-modal">
     <h2><span>➕</span> Add New User</h2>
     
-    <div class="form-group">
-      <label>Name</label>
-      <input type="text" [(ngModel)]="newUser.name" placeholder="Enter full name">
-    </div>
+    <div class="modal-scroll-area">
+      <div class="form-group center">
+        <div class="image-preview" *ngIf="newUser.profile_img">
+          <img [src]="newUser.profile_img" alt="Profile Preview">
+        </div>
+        <label class="file-label">
+          📁 Upload Profile Picture
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+        </label>
+      </div>
 
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" [(ngModel)]="newUser.email" placeholder="user@example.com">
-    </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="newUser.name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" [(ngModel)]="newUser.email" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="newUser.password" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" [(ngModel)]="newUser.phone_no" placeholder="+91 0000000000">
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label>Role</label>
-      <select [(ngModel)]="newUser.role">
-        <option value="">Select Role</option>
-        <option value="Admin">Admin</option>
-        <option value="User">User</option>
-        <option value="General">General</option>
-      </select>
-    </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Gender</label>
+          <select [(ngModel)]="newUser.gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select [(ngModel)]="newUser.role">
+            <option value="">Select Role</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label>Select Skills</label>
-      <div class="skills-grid">
-        <div *ngFor="let skill of availableSkills" class="skill-check">
-          <input 
-            type="checkbox" 
-            [id]="'modal-add-' + skill"
-            (change)="toggleNewUserSkill($event, skill)">
-          <label [for]="'modal-add-' + skill">{{ skill }}</label>
+      <div class="form-group">
+        <label>Skills</label>
+        <div class="skills-checkbox-grid">
+         <div *ngFor="let skill of availableSkills" class="skill-check">
+  <input 
+    type="checkbox" 
+    (change)="toggleSkill('new', skill)">
+  <label>{{ skill }}</label>
+</div>
         </div>
       </div>
     </div>
 
     <div class="modal-actions">
-      <button class="btn-cancel" (click)="showAddModal = false">Cancel</button>
-      <button class="btn-save" (click)="addUser()">Save User</button>
+      <button class="btn btn-secondary" (click)="showAddModal = false">Cancel</button> &nbsp;
+      <button class="btn btn-primary" (click)="addUser()">Register User</button>
     </div>
   </div>
 </div>
-
-<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
-  <p style="font-size: 20px; color: white">Loading...</p>
-</ngx-spinner>
+</div>

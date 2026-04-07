@@ -70,3 +70,89 @@
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- SHARED RESPONSIVE BASE --- */
+.content {
+  padding: 40px 20px; /* Reduced side padding for small screens */
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-h));
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 500px; /* Keeps it neat on desktop */
+  animation: slideUp 0.4s ease-out;
+}
+
+/* --- MOBILE RESPONSIVE QUERIES --- */
+@media (max-width: 600px) {
+  .topbar {
+    padding: 0 16px; /* Less horizontal padding in header */
+    
+    h1 {
+      font-size: 1.1rem; /* Smaller title so it doesn't wrap */
+    }
+  }
+
+  .content {
+    padding: 20px 15px; /* Tighten up the main padding */
+  }
+
+  .profile-card {
+    border-radius: 15px; /* Slightly smaller radius for mobile feel */
+  }
+
+  .card-banner {
+    height: 100px; /* Shorter banner */
+  }
+
+  .profile-img-wrapper {
+    margin-top: -50px; /* Adjusted offset for smaller image */
+    
+    img {
+      width: 100px; 
+      height: 100px;
+      border-width: 4px; /* Thinner border looks better on small screens */
+    }
+  }
+
+  .profile-details {
+    padding: 20px 20px 30px; /* Less internal padding */
+
+    h2 {
+      font-size: 1.5rem; /* Scale down the name */
+    }
+
+    .email {
+      font-size: 0.85rem; /* Smaller text for long emails to prevent overflow */
+      word-break: break-all; /* Prevents long emails from breaking the layout */
+      margin-bottom: 15px;
+    }
+  }
+
+  .skills {
+    gap: 8px; /* Tighter chips */
+    
+    .skill-chip {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+    }
+  }
+  
+  .divider {
+    margin: 20px 0; /* Less vertical space */
+  }
+}
+
+/* For ultra-small screens (iPhone SE etc) */
+@media (max-width: 380px) {
+  .profile-details h2 {
+    font-size: 1.3rem;
+  }
+  
+  .role-badge {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+}

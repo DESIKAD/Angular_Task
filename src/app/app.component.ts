@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'myapp';
+  
+  // New state for mobile menu toggle
+  isSidebarOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -16,39 +19,66 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Initial role check
-    this.updateUserRole();
+    // Basic initialization
   }
 
-  // Getter to pull the role directly from localStorage whenever the UI checks
+  /**
+   * Toggle the sidebar open/closed on mobile
+   */
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  /**
+   * Closes the sidebar (useful when clicking a link on mobile)
+   */
+  closeSidebar() {
+    this.isSidebarOpen = false;
+  }
+
+  /**
+   * Getter to pull the role directly from localStorage
+   */
   get userRole(): string {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.role || 'User';
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        return user.role || 'User';
+      } catch (e) {
+        return 'User';
+      }
+    }
+    return 'User';
   }
 
-  updateUserRole() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    // You can add extra logic here if needed when the app boots
-  }
-
+  /**
+   * Determines if the sidebar should be rendered based on the route
+   */
   showSidebar(): boolean {
     const hiddenRoutes = ['/signin', '/home', '/login', '/register', '/'];
-    
-    // Check if current route is in the hidden list
-    const isHidden = hiddenRoutes.includes(this.router.url);
-    
-    // Safety check: If we are on a hidden route, we don't care about the role.
-    // If we are NOT on a hidden route, the sidebar HTML will use 'userRole' getter.
-    return !isHidden;
+    // Return true if the current URL is NOT in the hiddenRoutes list
+    return !hiddenRoutes.includes(this.router.url);
   }
 
+  /**
+   * Handles user logout and cleanup
+   */
   logout() {
     this.authService.logout().then(() => {
+      // Clear local storage items
       localStorage.removeItem('user');
-      localStorage.removeItem('currentSessionId'); // Clean up attendance session too
+      localStorage.removeItem('currentSessionId');
+      
+      // Reset sidebar state for next login
+      this.isSidebarOpen = false;
+      
+      // Redirect to signin
       this.router.navigate(['/signin']); 
     }).catch(error => {
       console.error('Logout failed: ', error);
     });
   }
+
+  
 }
